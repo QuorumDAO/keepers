@@ -24,15 +24,15 @@ const updatePrice = async () => {
     functionArgs: [],
     senderKey: PRIVATE_KEY,
     nonce: new BN(nonce + 1),
-    fee: new BN(10000, 10),
-    postConditionMode: 1,
+    fee: new BN(3000, 10),
+    postConditionMode: 0,
     NETWORK
   };
 
   const transaction = await TX.makeContractCall(txOptions);
   const result = TX.broadcastTransaction(transaction, NETWORK);
 
-  await processing(result, transaction.txid(), 0);
+  await getTx(result, transaction.txid(), 0);
 };
 
 async function getNonce() {
@@ -42,36 +42,13 @@ async function getNonce() {
   return result.nonce;
 }
 
-async function processing(broadcastedResult, tx, count) {
+async function getTx(broadcastedResult, tx, count) {
   const url = `https://stacks-node-api.mainnet.stacks.co/extended/v1/tx/${tx}`;
   var result = await fetch(url);
   var value = await result.json();
 
-  console.log(`[UWU Keeper] Count: ${count}`);
-  
-  if (value.tx_status === "success") {
-    console.log(`[UWU Keeper] Transaction processed: ${tx}`);
-    console.log(value);
-    
-    return true;
-  };
-
-  if (value.tx_status === "pending") {
-    console.log(value);
-  } else if (count === 3) {
-    console.log(value, broadcastedResult);
-  };
-
-  if (count > 20) {
-    console.log("[UWU Keeper] Transaction failed after 10 tries");
-    console.log(value);
-
-    return false;
-  };
-
-  setTimeout(function () {
-    return processing(broadcastedResult, tx, count + 1);
-  }, 3000);
+  console.log(`[UWU Keeper] Transaction submitted:`);
+  console.log(value);
 };
 
 updatePrice();

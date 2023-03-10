@@ -25,7 +25,7 @@ const updatePrice = async () => {
     senderKey: PRIVATE_KEY,
     nonce: new BN(nonce),
     fee: new BN(3000, 10),
-    postConditionMode: 0,
+    postConditionMode: 2,
     NETWORK
   };
 

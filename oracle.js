@@ -23,7 +23,7 @@ const updatePrice = async () => {
     functionName: FUNCTION_NAME,
     functionArgs: [],
     senderKey: PRIVATE_KEY,
-    nonce: new BN(nonce + 1),
+    nonce: nonce,
     fee: new BN(3000, 10),
     postConditionMode: 0,
     NETWORK
@@ -36,10 +36,10 @@ const updatePrice = async () => {
 };
 
 async function getNonce() {
-  const url = `https://stacks-node-api.mainnet.stacks.co/v2/accounts/${PUBLIC_KEY}?proof=0`;
+  const url = `https://stacks-node-api.mainnet.stacks.co/extended/v1/address/${PUBLIC_KEY}/nonces`;
   const result = await REQUEST(url, { json: true });
 
-  return result.nonce;
+  return result["possible_next_nonce"];
 }
 
 async function getTx(broadcastedResult, tx, count) {

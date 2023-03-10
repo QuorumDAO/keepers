@@ -23,7 +23,7 @@ const updatePrice = async () => {
     functionName: FUNCTION_NAME,
     functionArgs: [],
     senderKey: PRIVATE_KEY,
-    nonce: nonce,
+    nonce: new BN(nonce),
     fee: new BN(3000, 10),
     postConditionMode: 0,
     NETWORK

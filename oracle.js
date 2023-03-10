@@ -43,7 +43,7 @@ async function getNonce() {
 }
 
 async function processing(broadcastedResult, tx, count) {
-  const url = `https://stacks-node-api.mainnet.stacks.co/v2/accounts/extended/v1/tx/${tx}`;
+  const url = `https://stacks-node-api.mainnet.stacks.co/extended/v1/tx/${tx}`;
   var result = await fetch(url);
   var value = await result.json();
 
@@ -73,3 +73,5 @@ async function processing(broadcastedResult, tx, count) {
     return processing(broadcastedResult, tx, count + 1);
   }, 3000);
 };
+
+updatePrice();

@@ -14,10 +14,10 @@ const NET = require("@stacks/network");
 
 const network = new NET.StacksMainnet();
 
-const updatePrice = async () => {
+const callSendToProxy = async () => {
   let nonce = await getNonce();
 
-  const txOptions = {
+  const options = {
     contractAddress: CONTRACT_ADDRESS,
     contractName: CONTRACT_NAME,
     functionName: FUNCTION_NAME,
@@ -29,10 +29,14 @@ const updatePrice = async () => {
     network
   };
 
-  const transaction = await TX.makeContractCall(txOptions);
+  const transaction = await TX.makeContractCall(options);
   const result = TX.broadcastTransaction(transaction, network);
 
-  await getTx(result, transaction.txid());
+  console.log("[UWU Keeper] Transaction submitted:");
+  console.log(`[>] ID: ${transaction.txid()}`);
+  console.log(`[>] SENDER: ${PUBLIC_KEY}`);
+  console.log(`[>] FEE: ${new BN(3000, 10)}`);
+  console.log(`[>] NONCE: ${new BN(nonce)}`);
 };
 
 async function getNonce() {
@@ -42,13 +46,4 @@ async function getNonce() {
   return result["possible_next_nonce"];
 }
 
-async function getTx(broadcastedResult, tx) {
-  const url = `https://stacks-node-api.mainnet.stacks.co/extended/v1/tx/${tx}`;
-  var result = await fetch(url);
-  var value = await result.json();
-
-  console.log("[UWU Keeper] Transaction submitted:");
-  console.log(value);
-};
-
-updatePrice();
+callSendToProxy();

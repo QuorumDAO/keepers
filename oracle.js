@@ -44,6 +44,6 @@ async function getNonce() {
   const result = await REQUEST(url, { json: true });
 
   return result["possible_next_nonce"];
-}
+};
 
 callSendToProxy();

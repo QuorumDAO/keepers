@@ -12,7 +12,7 @@ const REQUEST = require("request-promise");
 const TX = require("@stacks/transactions");
 const NET = require("@stacks/network");
 
-const NETWORK = new NET.StacksMainnet();
+const network = new NET.StacksMainnet();
 
 const updatePrice = async () => {
   let nonce = await getNonce();
@@ -26,13 +26,13 @@ const updatePrice = async () => {
     nonce: new BN(nonce),
     fee: new BN(3000, 10),
     postConditionMode: 2,
-    NETWORK
+    network
   };
 
   const transaction = await TX.makeContractCall(txOptions);
-  const result = TX.broadcastTransaction(transaction, NETWORK);
+  const result = TX.broadcastTransaction(transaction, network);
 
-  await getTx(result, transaction.txid(), 0);
+  await getTx(result, transaction.txid());
 };
 
 async function getNonce() {
@@ -42,12 +42,12 @@ async function getNonce() {
   return result["possible_next_nonce"];
 }
 
-async function getTx(broadcastedResult, tx, count) {
+async function getTx(broadcastedResult, tx) {
   const url = `https://stacks-node-api.mainnet.stacks.co/extended/v1/tx/${tx}`;
   var result = await fetch(url);
   var value = await result.json();
 
-  console.log(`[UWU Keeper] Transaction submitted:`);
+  console.log("[UWU Keeper] Transaction submitted:");
   console.log(value);
 };
 
